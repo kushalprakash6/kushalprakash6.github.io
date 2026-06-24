@@ -401,20 +401,32 @@
         <p>© 2026 Kushal Prakash. Built for GitHub Pages.</p>
     </footer>
 
-    <script>
+<script>
         let currentLang = 'en';
+        
         function toggleLanguage() {
+            // Switch the language state
             currentLang = currentLang === 'en' ? 'de' : 'en';
-            document.querySelectorAll('[lang="en"]').forEach(el => el.style.display = currentLang === 'en' ? 'block' : 'none');
-            document.querySelectorAll('[lang="de"]').forEach(el => el.style.display = currentLang === 'de' ? 'block' : 'none');
             
-            document.querySelectorAll('p[lang], h2[lang], div[lang], span[lang]').forEach(el => {
-                if(el.getAttribute('lang') === currentLang) {
+            // Hide everything that has a lang attribute first
+            document.querySelectorAll('[lang]').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Show only the elements matching the active language
+            document.querySelectorAll(`[lang="${currentLang}"]`).forEach(el => {
+                // If it's a small inline tag like a span, keep it inline; otherwise block
+                if (el.tagName === 'SPAN') {
+                    el.style.display = 'inline-block';
+                } else {
                     el.style.display = 'block';
                 }
             });
         }
-        toggleLanguage(); toggleLanguage();
+
+        // Run once on load to ensure the page starts clean with English visible
+        document.querySelectorAll('[lang="de"]').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('[lang="en"]').forEach(el => el.style.display = 'block');
     </script>
 </body>
 </html>
