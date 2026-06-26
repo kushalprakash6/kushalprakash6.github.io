@@ -1,432 +1,299 @@
+Here is a complete, single-file `index.html` solution that you can drop directly into your GitHub repository.
+
+It is designed with a **classic CRT terminal theme** (deep charcoal background, glowing green monospace text) and features a seamless **English / Deutsch language toggle** built right into the top navigation.
+
+### Instructions for Deployment
+
+1. Create a repository on GitHub named `yourusername.github.io` (replace `yourusername` with your actual GitHub username).
+2. Create a file named `index.html` in that repository.
+3. Copy and paste the code below into that file, save, and commit. Your site will be live at `[https://yourusername.github.io](https://yourusername.github.io)`.
+
+---
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kushal Prakash | Portfolio</title>
+    <title>Portfolio | Terminal Edition</title>
     <style>
         :root {
-            --bg-color: #f8f9fa;
-            --text-color: #212529;
-            --primary-color: #0056b3;
-            --secondary-color: #6c757d;
-            --card-bg: #ffffff;
-            --border-color: #dee2e6;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            --bg-color: #0a0f0d;
+            --terminal-green: #33ff33;
+            --terminal-dim: #1ea61e;
+            --text-shadow: 0 0 5px rgba(51, 255, 51, 0.5);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            color: var(--terminal-green);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
             padding: 20px;
+            line-height: 1.6;
+            text-shadow: var(--text-shadow);
+        }
+
+        /* Scanline effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
         }
 
         header {
-            max-width: 900px;
-            margin: 40px auto 20px auto;
-            position: relative;
-        }
-
-        .lang-switch {
-            position: absolute;
-            top: 0;
-            right: 0;
-        }
-
-        .lang-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            cursor: pointer;
-            font-weight: bold;
-            border-radius: 4px;
-            transition: 0.2s;
-        }
-
-        .lang-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: #111;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            color: var(--secondary-color);
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-        }
-
-        .contact-links {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            list-style: none;
-            font-size: 0.95rem;
-        }
-
-        .contact-links a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        .contact-links a:hover {
-            text-decoration: underline;
-        }
-
-        main {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        section {
-            margin: 40px 0;
-        }
-
-        h2 {
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 5px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .item-header {
+            border-bottom: 2px dashed var(--terminal-green);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            flex-wrap: wrap;
+        }
+
+        .lang-switch {
+            background: transparent;
+            border: 1px solid var(--terminal-green);
+            color: var(--terminal-green);
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: monospace;
+            box-shadow: var(--text-shadow);
+        }
+
+        .lang-switch:hover {
+            background: var(--terminal-green);
+            color: var(--bg-color);
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        h1 { font-size: 2rem; }
+        h2 { 
+            font-size: 1.4rem; 
+            border-bottom: 1px solid var(--terminal-dim);
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+
+        .project-card, .cert-card, .volunteer-card {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid var(--terminal-dim);
+            background: rgba(51, 255, 51, 0.02);
+        }
+
+        .project-card:hover {
+            border-color: var(--terminal-green);
+            box-shadow: inset 0 0 10px rgba(51, 255, 51, 0.1);
+        }
+
+        .meta {
+            color: var(--terminal-dim);
+            font-size: 0.9rem;
             margin-bottom: 10px;
         }
 
-        .item-title {
-            font-weight: bold;
-            font-size: 1.15rem;
-        }
-
-        .item-org {
-            color: var(--primary-color);
-            font-weight: 500;
-        }
-
-        .item-date {
-            color: var(--secondary-color);
-            font-size: 0.9rem;
-        }
-
-        .item-desc {
+        .skills {
             margin-top: 10px;
-            font-size: 0.98rem;
-        }
-
-        .item-desc ul {
-            padding-left: 20px;
-            margin-top: 5px;
-        }
-
-        .skills-tag-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .skill-tag {
-            background: #e9ecef;
-            color: #495057;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-        }
-
-        .skills-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            border-radius: 6px;
-        }
-
-        .skills-card h3 {
-            font-size: 1rem;
-            margin-bottom: 8px;
-            color: var(--primary-color);
-        }
-
-        footer {
-            max-width: 900px;
-            margin: 60px auto 20px auto;
-            text-align: center;
             font-size: 0.9rem;
-            color: var(--secondary-color);
-            border-top: 1px solid var(--border-color);
-            padding-top: 20px;
         }
 
-        [lang="de"] {
+        .skills span {
+            display: inline-block;
+            background: rgba(51, 255, 51, 0.1);
+            padding: 2px 6px;
+            margin: 2px;
+            border: 1px solid var(--terminal-dim);
+        }
+
+        /* Language visibility rules */
+        [lang="de"] .lang-en,
+        [lang="en"] .lang-de {
             display: none;
+        }
+
+        ul {
+            list-style-type: " > ";
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
         }
     </style>
 </head>
-<body>
+<body lang="en">
 
     <header>
-        <div class="lang-switch">
-            <button class="lang-btn" onclick="toggleLanguage()">DE / EN</button>
+        <div>
+            <h1>[SYSTEM_PORTFOLIO.EXE]</h1>
+            <p class="lang-en">Welcome, Operator. Select terminal logs below.</p>
+            <p class="lang-de">Willkommen, Operator. Wählen Sie unten die Terminal-Logs aus.</p>
         </div>
-        <h1>Kushal Prakash</h1>
-        <p class="subtitle" lang="en">Security Solutions & Embedded Software Engineer</p>
-        <p class="subtitle" lang="de">Security Solutions & Embedded Software-Entwickler</p>
-        
-        <ul class="contact-links">
-            <li>📍 Enzweihingen, Germany</li>
-            <li>📧 <a href="mailto:kushal.prakash@yahoo.in">kushal.prakash@yahoo.in</a></li>
-            <li>📱 +4915906324760</li>
-            <li>🔗 <a href="https://linkedin.com" target="_blank">LinkedIn</a></li>
-            <li>💻 <a href="https://github.com/kushalprakash6" target="_blank">GitHub</a></li>
-        </ul>
+        <button class="lang-switch" onclick="toggleLanguage()">TOGGLE_LANG (EN/DE)</button>
     </header>
 
-    <main>
-        <!-- EXPERIENCE SECTION -->
-        <section>
-            <h2 lang="en">Work Experience</h2>
-            <h2 lang="de">Berufserfahrung</h2>
+    <!-- PROJECTS SECTION -->
+    <section>
+        <h2>
+            <span class="lang-en">// Projects</span>
+            <span class="lang-de">// Projekte</span>
+        </h2>
 
-            <div class="item">
-                <div class="item-header">
-                    <div>
-                        <div class="item-title" lang="en">Output stage Diagnostics Engineer | Intern</div>
-                        <div class="item-title" lang="de">Output stage Diagnostics Engineer | Praktikant</div>
-                        <div class="item-org">Rexroth Bosch AG — Schwieberdingen, Stuttgart</div>
-                    </div>
-                    <div class="item-date">09/2025 – 02/2026</div>
-                </div>
-                <div class="item-desc" lang="en">
-                    <ul>
-                        <li>Innovating and implementing output stage diagnosis for power MOSFETs in Infineon, ST, and ARM controllers.</li>
-                        <li>Isolating faults for different load combinations to identify the exact location and type of error in safety applications.</li>
-                    </ul>
-                </div>
-                <div class="item-desc" lang="de">
-                    <ul>
-                        <li>Innovation und Implementierung von Endstufendiagnosen für Leistungs-MOSFETs in Infineon-, ST- und ARM-Controllern.</li>
-                        <li>Fehlerisolierung für verschiedene Lastkombinationen zur Identifizierung des exakten Fehlerorts und -typs in Sicherheitsanwendungen.</li>
-                    </ul>
-                </div>
+        <div class="project-card">
+            <h3>Modelling of IoT Network behaviour & AI Security</h3>
+            <div class="meta">Dec 2024 – May 2025 | Frankfurt University of Applied Sciences</div>
+            <p class="lang-en">Leveraging open-source LLMs to train on IoT network signals, simulating various security attacks on IoT devices, and researching defense mechanisms against these threats.</p>
+            <p class="lang-de">Nutzung von Open-Source-LLMs zum Training auf IoT-Netzwerksignalen, Simulation verschiedener Sicherheitsangriffe auf IoT-Geräte und Erforschung von Abwehrmechanismen gegen diese Bedrohungen.</p>
+            <div class="skills">
+                <span>Security</span><span>Internet of Things (IoT)</span><span>LLMs</span><span>AI Techniques</span>
             </div>
+        </div>
 
-            <div class="item">
-                <div class="item-header">
-                    <div>
-                        <div class="item-title" lang="en">Security Solutions Engineer | Work-study</div>
-                        <div class="item-title" lang="de">Security Solutions Engineer | Werkstudent</div>
-                        <div class="item-org">ETAS GmbH — Abstatt, Stuttgart</div>
-                    </div>
-                    <div class="item-date">05/2023 – 03/2025</div>
-                </div>
-                <div class="item-desc" lang="en">
-                    <ul>
-                        <li>Software analysis, development, testing, and release of HSM (Hardware Security Module) firmware and host integration compatibility.</li>
-                        <li>Static code analysis, consulting, and support for internal stakeholders utilizing security features and CryptoStack.</li>
-                        <li>Identified key bottlenecks and implemented automation tools that reduced information search time by 25% and boosted processing efficiency.</li>
-                    </ul>
-                </div>
-                <div class="item-desc" lang="de">
-                    <ul>
-                        <li>Softwareanalyse, Entwicklung, Test und Freigabe von HSM-Firmware (Hardware Security Module) und Kompatibilität mit Host-Software.</li>
-                        <li>Statische Codeanalyse, Beratung und Support interner Kunden im Bereich Security und CryptoStack.</li>
-                        <li>Identifikation von Schwachstellen und Implementierung smarter Tools zur Informationsbeschaffung, wodurch die Suchzeit um 25% verkürzt wurde.</li>
-                    </ul>
-                </div>
+        <div class="project-card">
+            <h3>nextwork-web-project</h3>
+            <div class="meta">Apr 2025</div>
+            <p class="lang-en">Java web app deployment utilizing automated AWS CI/CD pipelines.</p>
+            <p class="lang-de">Bereitstellung einer Java-Web-App unter Verwendung automatisierter AWS CI/CD-Pipelines.</p>
+            <div class="skills">
+                <span>Amazon Web Services (AWS)</span><span>DevOps</span><span>Java</span>
             </div>
+        </div>
 
-            <div class="item">
-                <div class="item-header">
-                    <div>
-                        <div class="item-title" lang="en">Senior Software Engineer | Product Owner | Test Manager</div>
-                        <div class="item-title" lang="de">Senior Software Engineer | Product Owner | Test Manager</div>
-                        <div class="item-org">Robert Bosch Engineering and Solutions — Bengaluru, India</div>
-                    </div>
-                    <div class="item-date">07/2018 – 10/2022</div>
-                </div>
-                <div class="item-desc" lang="en">
-                    <ul>
-                        <li>Led 4 projects end-to-end for transmission bootloader software through full SDLC phases across major automotive OEMs.</li>
-                        <li>Implemented core cybersecurity layers: Secure Flashing (signatures), Secure Boot, Trusted Boot, and PKI handling/parsing.</li>
-                        <li>Integrated AUTOSAR architecture, cryptographic primitives, and complex third-party stacks.</li>
-                        <li>Managed a testing team of 5 members, optimizing resource allocation and saving 25% in test setup times via modular test cases.</li>
-                        <li>Designed cross-platform architectural layers for IFX/ST microcontrollers, streamlining startup efforts for modern variants by 35%.</li>
-                    </ul>
-                </div>
-                <div class="item-desc" lang="de">
-                    <ul>
-                        <li>End-to-End-Leitung von 4 Projekten zur Entwicklung von Bootloader-Software für Automatikgetriebe für verschiedene OEMs.</li>
-                        <li>Implementierung von Cybersecurity-Funktionen für sicheres Flashen (Signatur), Start-up (Secure Boot, Trusted Boot) und Zertifikatsverwaltung (PKI).</li>
-                        <li>Integration von Autosar-, Krypto- und Drittanbieter-Stacks.</li>
-                        <li>Leitung eines Testteams von 5 Personen als Testmanager; Reduzierung der Testeinrichtungszeit um 25% durch Wiederverwendung von Testfällen.</li>
-                        <li>Design der SW-Architektur und Implementierung plattformübergreifender Komponenten (IFX, ST), wodurch der Startup-Aufwand um 35% sank.</li>
-                    </ul>
-                </div>
+        <div class="project-card">
+            <h3>Unit tests for component in NeoCortexApi</h3>
+            <div class="meta">Dec 2023 – Jun 2024 | Frankfurt University of Applied Sciences</div>
+            <p class="lang-en">Developed and executed unit tests for the Adapt segments module in the open-source project ‘NeoCortexApi’, achieving 100% code coverage and deploying it on Azure web services.</p>
+            <p class="lang-de">Entwicklung und Ausführung von Unit-Tests für das 'Adapt segments'-Modul im Open-Source-Projekt „NeoCortexApi“, Erreichen von 100 % Codeabdeckung und Bereitstellung auf Azure Web Services.</p>
+            <div class="skills">
+                <span>Git</span><span>.NET Framework</span><span>Unit Testing</span><span>Azure</span>
             </div>
-        </section>
+        </div>
 
-        <!-- PROJECTS SECTION -->
-        <section>
-            <h2 lang="en">Key Projects</h2>
-            <h2 lang="de">Wichtigste Projekte</h2>
-
-            <div class="item">
-                <div class="item-header">
-                    <div>
-                        <div class="item-title" lang="en">Modelling of LLMs for CyberSecurity in IoT devices | Master Thesis</div>
-                        <div class="item-title" lang="de">Modellierung von LLMs für Cybersicherheit in IoT-Geräten | Masterarbeit</div>
-                        <div class="item-org">Frankfurt University of Applied Sciences</div>
-                    </div>
-                    <div class="item-date">12/2024 – 06/2025</div>
-                </div>
-                <p class="item-desc" lang="en">Researched, collected, and processed realistic IoT network signaling traces. Finetuned and optimized open-source LLMs to simulate synthetic cyber-attack vectors and evaluated modern Intrusion Detection Systems to mitigate high false-positive rates.</p>
-                <p class="item-desc" lang="de">Erforschung, Sammlung und Verarbeitung realistischer IoT-Gerätenetzwerkdaten. Optimierung und Feintuning von Open-Source-LLMs zur Generierung synthetischer Angriffsdaten und Validierung von IDS zur Minimierung von Fehlalarmen.</p>
-                <div class="skills-tag-container">
-                    <span class="skill-tag">LLMs</span><span class="skill-tag">IoT Security</span><span class="skill-tag">Intrusion Detection</span><span class="skill-tag">Python</span>
-                </div>
+        <div class="project-card">
+            <h3>Object Detection and Tracking in Computer Vision</h3>
+            <div class="meta">Dec 2023 – May 2024 | Frankfurt University of Applied Sciences</div>
+            <p class="lang-en">Combined RGB and depth cameras for human detection and tracking in a live video using YOLO and SORT algorithms, improving detection accuracy by 70% in low-light conditions.</p>
+            <p class="lang-de">Kombination von RGB- und Tiefenkameras zur Personenerkennung und –verfolgung in einem Live-Video mithilfe von YOLO- und SORT-Algorithmen, wodurch die Erkennungsgenauigkeit bei schlechten Lichtverhältnissen um 70 % verbessert wurde.</p>
+            <div class="skills">
+                <span>OpenCV</span><span>YOLO</span><span>SORT</span><span>Computer Vision</span><span>Deep Learning</span>
             </div>
+        </div>
 
-            <div class="item">
-                <div class="item-header">
-                    <div>
-                        <div class="item-title" lang="en">Object Detection and Tracking in Computer Vision</div>
-                        <div class="item-title" lang="de">Objekterkennung und Tracking in Computer Vision</div>
-                        <div class="item-org">Frankfurt University of Applied Sciences</div>
-                    </div>
-                    <div class="item-date">12/2023 – 05/2024</div>
-                </div>
-                <p class="item-desc" lang="en">Combined RGB and structured depth sensors for live human tracking using YOLO and SORT pipelines, advancing lower-light detection constraints by up to 70%.</p>
-                <p class="item-desc" lang="de">Kombination von RGB- und Tiefenkameras zur Personen-Erkennung und -Verfolgung im Live-Video mittels YOLO- und SORT-Algorithmen; Steigerung der Genauigkeit bei schlechten Lichtverhältnissen um 70%.</p>
-                <div class="skills-tag-container">
-                    <span class="skill-tag">OpenCV</span><span class="skill-tag">YOLO</span><span class="skill-tag">SORT</span><span class="skill-tag">Deep Learning</span>
-                </div>
+        <div class="project-card">
+            <h3>Sensor System for Baby Detection in a Car Seat</h3>
+            <div class="meta">Dec 2023 – Mar 2024 | Frankfurt University of Applied Sciences</div>
+            <p class="lang-en">Collected, trained, and tested data on neural network models, achieving 91% accuracy in detecting infants in a car safety seat using ultrasonic sensors.</p>
+            <p class="lang-de">Erfassung, Training und Testen von Daten auf neuronalen Netzwerkmodellen, wodurch eine Genauigkeit von 91 % bei der Erkennung von Babys im Autositz mithilfe von Ultraschallsensoren erreicht wurde.</p>
+            <div class="skills">
+                <span>Support Vector Machine (SVM)</span><span>Artificial Neural Networks</span><span>Ultrasonic Sensors</span>
             </div>
+        </div>
 
-            <div class="item">
-                <div class="item-header">
-                    <div>
-                        <div class="item-title" lang="en">Smart Baby Seat Detection Using Machine Learning</div>
-                        <div class="item-title" lang="de">Intelligente Babysitz-Erkennung mittels Machine Learning</div>
-                        <div class="item-org">Frankfurt University of Applied Sciences</div>
-                    </div>
-                    <div class="item-date">12/2023 – 03/2024</div>
-                </div>
-                <p class="item-desc" lang="en">Engineered and benchmarked ultrasonic sensor features feeding into neural network nodes, successfully evaluating target presence classifications at 91% accuracy.</p>
-                <p class="item-desc" lang="de">Erfassung, Training und Test von Daten auf neuronalen Netzwerkmodellen, wodurch eine Genauigkeit von 91% bei der Erkennung von Babys im Autositz mittels Ultraschallsensorik erzielt wurde.</p>
-                <div class="skills-tag-container">
-                    <span class="skill-tag">Neural Networks</span><span class="skill-tag">SVM</span><span class="skill-tag">Ultrasonic Sensors</span>
-                </div>
+        <div class="project-card">
+            <h3>Setup 5G network using Open5gs and UERANSIM</h3>
+            <div class="meta">Dec 2023 – Feb 2024 | Frankfurt University of Applied Sciences</div>
+            <p class="lang-en">Configured a 5G standalone network supporting internet connectivity, VoIP, file sharing, messaging, and video streaming built with custom network slicing.</p>
+            <p class="lang-de">Konfiguration eines eigenständigen 5G-Netzwerks (Standalone), das Internetkonnektivität, VoIP, Dateifreigabe, Messaging und Videostreaming mit benutzerdefiniertem Network Slicing unterstützt.</p>
+            <div class="skills">
+                <span>open5gs</span><span>Network routing</span><span>UERANSIM</span><span>5G SA</span>
             </div>
-        </section>
+        </div>
 
-        <!-- SKILLS SECTION -->
-        <section>
-            <h2 lang="en">Technical Skills</h2>
-            <h2 lang="de">Technische Fähigkeiten</h2>
-            <div class="skills-grid">
-                <div class="skills-card">
-                    <h3 lang="en">Languages & Tools</h3>
-                    <h3 lang="de">Sprachen & Tools</h3>
-                    <p>C/C++, Python, C#, OpenSSL, GIT, CMake, Vector CANoe, CAN, .NET, Trace32, Linux, Jenkins, CI/CD</p>
-                </div>
-                <div class="skills-card">
-                    <h3 lang="en">Artificial Intelligence</h3>
-                    <h3 lang="de">Künstliche Intelligenz</h3>
-                    <p>LLM Tuning, Computer Vision (OpenCV), Generative AI, PyTorch, TensorFlow, Scikit-learn, Pandas</p>
-                </div>
-                <div class="skills-card">
-                    <h3 lang="en">Standards & Architecture</h3>
-                    <h3 lang="de">Standards & Architektur</h3>
-                    <p>ISO 21434, ISO 26262, UDS (14229), AUTOSAR, HSM, V-Model, Agile Scrum</p>
-                </div>
+        <div class="project-card">
+            <h3>Detection and Classification of Tumour in Brain MRI</h3>
+            <div class="meta">Feb 2018 – Jun 2018 | Visvesvaraya Technological University</div>
+            <p class="lang-en">Implemented image processing and neural networks to classify brain tumors. Co-authored a paper discussing hybrid SVM and ANN classification architectures, achieving a 91.4% accuracy rate and a BER of 0.12.</p>
+            <p class="lang-de">Implementierung von Bildverarbeitung und künstlichen neuronalen Netzen zur Klassifizierung von Hirntumoren. Veröffentlichung eines Papers über kombinierte SVM- und ANN-Strukturen mit einer Genauigkeit von 91,4 % und einer BER von 0.12.</p>
+            <div class="skills">
+                <span>MATLAB</span><span>Support Vector Machine (SVM)</span><span>Image Processing</span><span>ANN</span>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- EDUCATION SECTION -->
-        <section>
-            <h2 lang="en">Education</h2>
-            <h2 lang="de">Ausbildung</h2>
-            <div class="item">
-                <div class="item-header">
-                    <div>
-                        <div class="item-title">M.Eng. Information Technology (Grade: 1.8)</div>
-                        <div class="item-org">Frankfurt University of Applied Sciences — Frankfurt am Main</div>
-                    </div>
-                    <div class="item-date">10/2022 – 09/2025</div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="item-header">
-                    <div>
-                        <div class="item-title">B.E. Electronics and Communications Engineering</div>
-                        <div class="item-org">JSS Academy of Technical Education — Bengaluru, India</div>
-                    </div>
-                    <div class="item-date">08/2014 – 06/2018</div>
-                </div>
-            </div>
-        </section>
-    </main>
+    <!-- CERTIFICATIONS SECTION -->
+    <section>
+        <h2>
+            <span class="lang-en">// Licenses & Certifications</span>
+            <span class="lang-de">// Lizenzen & Zertifizierungen</span>
+        </h2>
+        <ul>
+            <li><strong>Electric Vehicle Battery Charging Motor Components - Basics</strong> (Udemy, Apr 2025)</li>
+            <li><strong>Cybersecurity - Automotive [TARA, IDS]</strong> (Udemy, Mar 2025)</li>
+            <li><strong>Overview - Cybersecurity Engineering (ISO/SAE 21434:2021)</strong> (Udemy, Jan 2025)</li>
+            <li><strong>Tutoring Basics: Training for International Tutors</strong> (Frankfurt UAS, Apr 2024)</li>
+            <li><strong>Python for Computer Vision with OpenCV and Deep Learning</strong> (Udemy, Jan 2024)</li>
+            <li><strong>Cyber Security Masterclass - IT Security Policies</strong> (Udemy, Nov 2023)</li>
+            <li><strong>{ C Language } Deep Learning From Ground Up™</strong> (Udemy, Oct 2023)</li>
+            <li><strong>Python Scripting for Automation</strong> (Udemy, Oct 2023)</li>
+            <li><strong>Embedded ARM Cortex-M33 Trust Zone & Security</strong> (Udemy, Jul 2021)</li>
+            <li><strong>STM32Fx Microcontroller Custom Bootloader Development</strong> (Udemy, Jan 2021)</li>
+            <li><strong>Embedded Systems Programming on ARM Cortex-M3/M4</strong> (Udemy, Jan 2021)</li>
+            <li><strong>Mastering Microcontroller: Timers, PWM, CAN, Low Power</strong> (Udemy, May 2021)</li>
+            <li><strong>Controller Area Network - In-depth CAN BUS</strong> (Udemy, Jun 2021)</li>
+            <li><strong>Embedded Linux Step by Step Using Beaglebone Black</strong> (Udemy, Aug 2021)</li>
+            <li><strong>Mastering RTOS: Hands-on FreeRTOS and STM32Fx</strong> (Udemy, Jun 2021)</li>
+            <li><strong>Learn Autosar DCM and Diagstack from scratch</strong> (Udemy, Jul 2020)</li>
+            <li><strong>Internet of Things and its application</strong> (ExpertsHub, Jul 2016)</li>
+        </ul>
+    </section>
 
-    <footer>
-        <p>© 2026 Kushal Prakash. Built for GitHub Pages.</p>
-    </footer>
+    <!-- VOLUNTEERING SECTION -->
+    <section>
+        <h2>
+            <span class="lang-en">// Volunteering</span>
+            <span class="lang-de">// Ehrenamtliche Tätigkeit</span>
+        </h2>
+        <div class="volunteer-card">
+            <h3>Student Mentor</h3>
+            <div class="meta">International Career Service Rhein-Main | Feb 2025 - Jul 2025</div>
+            <p class="lang-en">Assisted students in crafting high-impact resumes and cover letters for industry applications. Conducted mentorship regarding prevailing industry shifts and standard workplace expectations.</p>
+            <p class="lang-de">Unterstützung von Studierenden bei der Erstellung aussagekräftiger Lebensläufe und Anschreiben für Bewerbungen. Beratung zu aktuellen Branchentrends und Erwartungen am Arbeitsplatz.</p>
+        </div>
+    </section>
 
-<script>
-        let currentLang = 'en';
-        
+    <!-- HONORS & AWARDS SECTION -->
+    <section>
+        <h2>
+            <span class="lang-en">// Honors & Awards</span>
+            <span class="lang-de">// Auszeichnungen & Ehrungen</span>
+        </h2>
+        <ul>
+            <li>
+                <strong>Torch bearer of the Department</strong> 
+                <span class="meta">- Robert Bosch Engineering and Business Solutions (Dec 2020)</span>
+            </li>
+            <li>
+                <strong>Spot award</strong> 
+                <span class="meta">- Robert Bosch Engineering and Business Solutions (Oct 2020)</span>
+            </li>
+            <li>
+                <strong>Excellence in academic performance</strong> 
+                <span class="meta">- JSS Academy of Technical Education (Feb 2015)</span>
+            </li>
+        </ul>
+    </section>
+
+    <script>
         function toggleLanguage() {
-            // Switch the language state
-            currentLang = currentLang === 'en' ? 'de' : 'en';
-            
-            // Hide everything that has a lang attribute first
-            document.querySelectorAll('[lang]').forEach(el => {
-                el.style.display = 'none';
-            });
-            
-            // Show only the elements matching the active language
-            document.querySelectorAll(`[lang="${currentLang}"]`).forEach(el => {
-                // If it's a small inline tag like a span, keep it inline; otherwise block
-                if (el.tagName === 'SPAN') {
-                    el.style.display = 'inline-block';
-                } else {
-                    el.style.display = 'block';
-                }
-            });
+            const body = document.body;
+            if (body.getAttribute('lang') === 'en') {
+                body.setAttribute('lang', 'de');
+            } else {
+                body.setAttribute('lang', 'en');
+            }
         }
-
-        // Run once on load to ensure the page starts clean with English visible
-        document.querySelectorAll('[lang="de"]').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('[lang="en"]').forEach(el => el.style.display = 'block');
     </script>
 </body>
 </html>
+
+```
