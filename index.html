@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kushal Prakash | System Terminal v1.0.2</title>
+    <title>Kushal Prakash | System Portfolio</title>
     <style>
         :root {
-            --bg-color: #0d110e;
-            --terminal-green: #33ff33;
-            --terminal-dim: #1ea61e;
-            --terminal-dark: #0a240a;
-            --text-shadow: 0 0 6px rgba(51, 255, 51, 0.65);
+            /* Vintage Gray & Phosphor Green Scheme */
+            --bg-color: #1e2220;
+            --panel-bg: #252a27;
+            --terminal-green: #22cc22;
+            --terminal-dim: #199919;
+            --terminal-dark: #103a10;
+            --border-color: #2e3531;
+            --text-shadow: 0 0 3px rgba(34, 204, 34, 0.4);
         }
 
         * {
@@ -23,539 +26,391 @@
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 20px;
-            line-height: 1.5;
+            line-height: 1.6;
             text-shadow: var(--text-shadow);
-            overflow-x: hidden;
         }
 
-        /* CRT Scanline & Flicker Simulation Effects */
+        /* CRT Raster Line Overlay */
         body::before {
             content: " ";
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.04));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
             z-index: 9999;
-            background-size: 100% 3px, 6px 100%;
+            background-size: 100% 3px;
             pointer-events: none;
         }
 
-        @keyframes crt-flicker {
-            0% { opacity: 0.98; }
-            50% { opacity: 1; }
-            100% { opacity: 0.99; }
-        }
-        
-        .terminal-container {
-            max-width: 1100px;
+        .container {
+            max-width: 900px;
             margin: 0 auto;
-            animation: crt-flicker 0.15s infinite;
+            border: 2px solid var(--terminal-dim);
+            background-color: var(--panel-bg);
+            padding: 30px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
         }
 
-        /* Header Layout */
+        /* Header Setup mimicking Reference Layout */
         header {
-            border: 2px solid var(--terminal-green);
-            padding: 20px;
+            border-bottom: 2px dashed var(--terminal-dim);
+            padding-bottom: 20px;
             margin-bottom: 25px;
-            background: rgba(10, 36, 10, 0.2);
-            position: relative;
         }
 
-        .header-top {
+        .header-meta {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
+            margin-bottom: 15px;
         }
 
-        .sys-title {
-            margin: 0;
-            font-size: 2.2rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .contact-info {
-            font-size: 0.9rem;
-            margin-top: 10px;
-        }
-
-        .contact-info a {
-            color: var(--terminal-green);
-            text-decoration: underline;
-            margin-right: 15px;
-        }
-
-        .lang-control {
+        .lang-btn {
             background: transparent;
-            border: 2px solid var(--terminal-green);
+            border: 1px solid var(--terminal-green);
             color: var(--terminal-green);
-            padding: 6px 14px;
+            padding: 4px 10px;
             cursor: pointer;
             font-family: monospace;
-            font-weight: bold;
-            text-shadow: var(--text-shadow);
-            transition: all 0.2s ease;
+            font-size: 0.85rem;
         }
 
-        .lang-control:hover {
+        .lang-btn:hover {
             background: var(--terminal-green);
             color: var(--bg-color);
-            box-shadow: 0 0 15px var(--terminal-green);
         }
 
-        /* Interactive Navigation Links Bar */
+        h1 {
+            font-size: 2rem;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+        }
+
+        .contact-grid {
+            font-size: 0.9rem;
+            color: var(--terminal-dim);
+        }
+
+        .contact-grid a {
+            color: var(--terminal-green);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--terminal-green);
+        }
+
+        /* Navigation Links Layout */
         nav {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 25px;
+            margin: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
         }
 
-        .nav-tab {
+        .nav-link {
             background: transparent;
-            border: 1px solid var(--terminal-dim);
+            border: none;
             color: var(--terminal-dim);
-            padding: 10px 18px;
             font-family: monospace;
+            font-size: 1rem;
             cursor: pointer;
-            text-transform: uppercase;
+            padding: 4px 8px;
             font-weight: bold;
-            flex-grow: 1;
-            text-align: center;
         }
 
-        .nav-tab:hover, .nav-tab.active {
+        .nav-link.active, .nav-link:hover {
             color: var(--terminal-green);
-            border-color: var(--terminal-green);
-            background: rgba(51, 255, 51, 0.1);
-            box-shadow: inset 0 0 8px rgba(51, 255, 51, 0.2);
+            text-decoration: underline;
         }
 
-        /* System Dynamic Console Input Prompt View */
-        .console-prompt {
-            margin: 15px 0;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
+        /* Prompt Display */
+        .prompt-line {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            border-left: 3px solid var(--terminal-dim);
         }
 
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 18px;
-            background: var(--terminal-green);
-            margin-left: 5px;
-            animation: blink 0.8s infinite;
+        .blink {
+            animation: blinker 1s linear infinite;
         }
+        @keyframes blinker { 50% { opacity: 0; } }
 
-        @keyframes blink {
-            0%, 49% { opacity: 1; }
-            50%, 100% { opacity: 0; }
-        }
-
-        /* Dynamic Main Content Window Frame */
-        .main-display {
-            border: 2px solid var(--terminal-green);
-            background: rgba(51, 255, 51, 0.01);
-            min-height: 450px;
-            padding: 25px;
-            position: relative;
-        }
-
-        .system-pane {
+        /* Dynamic Content Sections */
+        .section-pane {
             display: none;
         }
-
-        .system-pane.active-pane {
+        .section-pane.active {
             display: block;
-            animation: pane-load 0.25s ease-out;
         }
 
-        @keyframes pane-load {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        h2 {
+            font-size: 1.4rem;
+            border-bottom: 1px solid var(--terminal-dim);
+            padding-bottom: 5px;
+            margin-top: 30px;
+            text-transform: uppercase;
         }
 
-        /* Lists & Subcard Architectures */
-        .log-entry {
-            border-left: 3px double var(--terminal-dim);
-            padding-left: 15px;
-            margin-bottom: 30px;
+        .card {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
         }
 
-        .log-entry:hover {
-            border-left-color: var(--terminal-green);
-        }
-
-        .entry-title-row {
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
             flex-wrap: wrap;
-            margin-bottom: 5px;
+            font-weight: bold;
         }
 
-        .entry-title {
-            margin: 0;
-            font-size: 1.25rem;
+        .card-title {
+            font-size: 1.15rem;
             color: var(--terminal-green);
         }
 
-        .entry-meta {
+        .card-meta {
+            font-size: 0.85rem;
             color: var(--terminal-dim);
+        }
+
+        .card-subtitle {
+            font-style: italic;
             font-size: 0.9rem;
+            margin: 4px 0;
+            color: var(--terminal-dim);
         }
 
         ul {
-            list-style-type: ">> ";
-            padding-left: 20px;
             margin: 8px 0;
+            padding-left: 20px;
+            list-style-type: "* ";
         }
 
         li {
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
-        /* Multi-column Grid Layouts */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+        .tags {
+            margin-top: 8px;
+        }
+        .tag {
+            font-size: 0.8rem;
+            border: 1px solid var(--terminal-dark);
+            background: rgba(0, 0, 0, 0.15);
+            padding: 1px 6px;
+            margin-right: 4px;
+            display: inline-block;
         }
 
-        @media (max-width: 768px) {
-            .grid-2 { grid-template-columns: 1fr; }
-            .entry-title-row { flex-direction: column; }
-        }
-
-        .skill-group {
-            border: 1px dashed var(--terminal-dim);
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .skill-group h4 {
-            margin: 0 0 10px 0;
-            color: var(--terminal-green);
-            text-transform: uppercase;
-            border-bottom: 1px dashed var(--terminal-dim);
-            padding-bottom: 4px;
-        }
-
-        .badge-wall {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .badge {
-            border: 1px solid var(--terminal-dim);
-            padding: 2px 8px;
-            font-size: 0.85rem;
-            background: rgba(51, 255, 51, 0.05);
-        }
-
-        /* Bilingual Global Directives */
-        [lang="de"] .lang-en, [lang="en"] .lang-de {
+        /* Bidirectional Language Engine Logic */
+        [lang="de"] .lang-en,
+        [lang="en"] .lang-de {
             display: none !important;
         }
     </style>
 </head>
 <body lang="en">
 
-    <div class="terminal-container">
+    <div class="container">
         
         <!-- HEADER MODULE -->
         <header>
-            <div class="header-top">
-                <div>
-                    <h1 class="sys-title">KUSHAL_PRAKASH.SYS</h1>
-                    <div class="contact-info">
-                        <span>DOB: 06/09/1996[cite: 1]</span> | <span>NAT: Indian[cite: 1]</span><br>
-                        <span>LOC: Alter Ziegeleiweg 5, 71665 Enzweighingen[cite: 1]</span><br>
-                        <span>TEL: +4915906324760[cite: 1]</span> | <span>EML: kushal.prakash@yahoo.in[cite: 1]</span><br>
-                        <a href="https://linkedin.com" target="_blank">[LINKEDIN]</a>
-                        <a href="https://github.com" target="_blank">[GITHUB]</a>
-                    </div>
+            <div class="header-meta">
+                <span>SYS_STATUS: ONLINE</span>
+                <button class="lang-btn" onclick="toggleLanguage()">[SWITCH_LANGUAGE (DE/EN)]</button>
+            </div>
+            <h1>KUSHAL PRAKASH</h1>
+            <div class="contact-grid">
+                <div>DOB: 06/09/1996 | NAT: Indian[cite: 1]</div>
+                <div>LOC: Alter Ziegeleiweg 5, 71665 Enzweighingen[cite: 1]</div>
+                <div>TEL: +4915906324760 | EML: kushal.prakash@yahoo.in[cite: 1]</div>
+                <div style="margin-top: 5px;">
+                    <a href="#" target="_blank">[LINKEDIN]</a> | 
+                    <a href="#" target="_blank">[GITHUB]</a>
                 </div>
-                <button class="lang-control" onclick="switchLanguage()">LANG_TOGGLE [EN/DE]</button>
+                <div style="margin-top: 8px;" class="lang-en">
+                    RESUME DOWNLOADS: 
+                    <a href="Lebenslauf_Eng_A.pdf" target="_blank">[Automotive_EN.pdf]</a> | 
+                    <a href="Lebenslauf_Eng_ML.pdf" target="_blank">[MachineLearning_EN.pdf]</a>
+                </div>
+                <div style="margin-top: 8px;" class="lang-de">
+                    LEBENSLAUF DOWNLOADS: 
+                    <a href="Lebenslauf_Deu_A.pdf" target="_blank">[Automotive_DE.pdf]</a>
+                </div>
             </div>
         </header>
 
-        <!-- NAVIGATION TAB BAR -->
+        <!-- NAVIGATION LINKS BAR -->
         <nav>
-            <button class="nav-tab active" onclick="loadPane('about', 'cat about_me.log')">About</button>
-            <button class="nav-tab" onclick="loadPane('experience', 'chk --experience')">Experience</button>
-            <button class="nav-tab" onclick="loadPane('projects', 'ls ./projects')">Projects</button>
-            <button class="nav-tab" onclick="loadPane('skills', 'load --skills')">Skills</button>
-            <button class="nav-tab" onclick="loadPane('education', 'cat education.dat')">Education</button>
-            <button class="nav-tab" onclick="loadPane('awards', 'read awards_certs.txt')">Honors & Certs</button>
+            <button class="nav-link active" onclick="navigate('experience', 'load_experience.sh')">
+                <span class="lang-en">Experience</span><span class="lang-de">Berufserfahrung</span>
+            </button>
+            <button class="nav-link" onclick="navigate('projects', 'ls ./projects')">
+                <span class="lang-en">Projects</span><span class="lang-de">Projekte</span>
+            </button>
+            <button class="nav-link" onclick="navigate('skills', 'cat skills.db')">
+                <span class="lang-en">Skills</span><span class="lang-de">Fähigkeiten</span>
+            </button>
+            <button class="nav-link" onclick="navigate('education', 'query_education.sql')">
+                <span class="lang-en">Education</span><span class="lang-de">Ausbildung</span>
+            </button>
+            <button class="nav-link" onclick="navigate('awards', 'cat certifications.txt')">
+                <span class="lang-en">Honors & Certs</span><span class="lang-de">Zertifikate</span>
+            </button>
         </nav>
 
-        <!-- ACTIVE TERMINAL PROMPT SIMULATION -->
-        <div class="console-prompt">
-            <span>guest@kushal_prakash:~$ </span>
-            <span id="terminal-command" style="margin-left: 8px;">cat about_me.log</span>
-            <span class="cursor"></span>
+        <!-- PROMPT -->
+        <div class="prompt-line">
+            <span>user@mainframe:~$ </span><span id="cmd-text">load_experience.sh</span><span class="blink">_</span>
         </div>
 
-        <!-- MAIN TERMINAL SCREEN CORE INTERFACE -->
-        <main class="main-display">
-
-            <!-- ABOUT PANE -->
-            <div id="pane-about" class="system-pane active-pane">
-                <h3 class="lang-en">// OBJECTIVE EXECUTIVE SUMMARY</h3>
-                <h3 class="lang-de">// ZUSAMMENFASSUNG</h3>
-                <p class="lang-en">
-                    Systems & Cybersecurity Professional specialized in Automotive Diagnostics, Embedded Infrastructure, Hardware Security Modules (HSM), and Deep Learning Implementations. Proven engineering track record across major tier-1 entities including Bosch and ETAS[cite: 1].
-                </p>
-                <p class="lang-de">
-                    System- und Cybersecurity-Experte mit Spezialisierung auf Automfalldiagnose, eingebettete Infrastrukturen, Hardware-Sicherheitsmodule (HSM) und Deep-Learning-Implementierungen. Nachgewiesene technische Erfolge bei führenden Tier-1-Unternehmen wie Bosch und ETAS[cite: 3].
-                </p>
-            </div>
-
+        <!-- MAIN MOUNT CONTAINER FOR PANES -->
+        <main>
+            
             <!-- EXPERIENCE PANE -->
-            <div id="pane-experience" class="system-pane">
-                <!-- Entry 1 -->
-                <div class="log-entry">
-                    <div class="entry-title-row">
-                        <h4 class="entry-title">Output stage Diagnostics Engineer | Intern</h4>
-                        <span class="entry-meta">Sept. 2025 - Feb. 2026[cite: 1]</span>
+            <div id="pane-experience" class="section-pane active">
+                <!-- Job 1 -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Output stage Diagnostics Engineer | Intern[cite: 1]</span>
+                        <span class="card-meta">09/2025 - 02/2026[cite: 1]</span>
                     </div>
-                    <div class="entry-meta" style="margin-bottom: 8px;">Rexroth Bosch AG-Schwieberdingen, Stuttgart[cite: 1]</div>
+                    <div class="card-subtitle">Rexroth Bosch AG - Schwieberdingen, Stuttgart[cite: 1]</div>
                     <ul class="lang-en">
-                        <li>Innovated and implemented output stage diagnosis for power mosfets in Infineon, ST and ARM controllers[cite: 1].</li>
-                        <li>Isolated faults for different load combinations to identify the exact location and type of error in safety applications[cite: 1].</li>
+                        <li>Innovating and implementing output stage diagnosis for power mosfets in Infineon, ST and ARM controllers[cite: 1].</li>
+                        <li>Isolating faults for different load combinations to identify the exact location and type of error in safety applications[cite: 1].</li>
                     </ul>
                     <ul class="lang-de">
                         <li>Entwicklung und Implementierung einer Ausgangsstufendiagnose für Leistungs-MOSFETs in Infineon-, ST- und ARM-Controllern[cite: 3].</li>
-                        <li>Fehlerisolierung für verschiedene Lastkombinationen zur genauen Bestimmung von Fehlerort und Fehlerart[cite: 3].</li>
+                        <li>Fehlerisolierung für verschiedene Lastkombinationen zur genauen Bestimmung von Fehlerort und Fehlerart in sicherheitsrelevanten Steuergeräten[cite: 3].</li>
                     </ul>
                 </div>
 
-                <!-- Entry 2 -->
-                <div class="log-entry">
-                    <div class="entry-title-row">
-                        <h4 class="entry-title">Security Solutions Engineer | Work-study</h4>
-                        <span class="entry-meta">May 2023 - Mar. 2025[cite: 1]</span>
+                <!-- Job 2 -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Security Solutions Engineer | Work-study[cite: 1]</span>
+                        <span class="card-meta">05/2023 - 03/2025[cite: 1]</span>
                     </div>
-                    <div class="entry-meta" style="margin-bottom: 8px;">ETAS GmbH-Abstatt, Stuttgart[cite: 1]</div>
+                    <div class="card-subtitle">ETAS GmbH - Abstatt, Stuttgart[cite: 1]</div>
                     <ul class="lang-en">
-                        <li>Software analysis, development, testing and release of HSM (Hardware Security Module) and its compatibility with various Host software[cite: 1].</li>
+                        <li>Software analysis, development, testing and release of HSM (Hardware Security Module) and host components[cite: 1].</li>
                         <li>Static code analysis, consulting and support of internal customers in the area of security and CryptoStack[cite: 1].</li>
-                        <li>Identified key pain points and implemented multiple smart tools to streamline information retrieval, reducing search time by 25% and boosting efficiency[cite: 1].</li>
+                        <li>Implemented multiple smart tools to streamline information retrieval, boosting structural search speed efficiency by 25%[cite: 1].</li>
                     </ul>
                     <ul class="lang-de">
                         <li>Softwareanalyse, -entwicklung, -tests und -freigabe eines HSM (Hardware Security Module) sowie Sicherstellung der Kompatibilität mit verschiedener Host-Software[cite: 3].</li>
                         <li>Statische Codeanalyse sowie Beratung und Unterstützung interner Kunden im Bereich Sicherheit und CryptoStack[cite: 3].</li>
-                        <li>Identifikation zentraler Schwachstellen und Implementierung mehrerer intelligenter Tools zur Optimierung der Informationsbeschaffung, wodurch die Suchzeit um 25% reduziert und die Effizienz gesteigert wurde[cite: 3].</li>
+                        <li>Identifikation zentraler Schwachstellen und Implementierung mehrerer intelligenter Tools zur Optimierung der Informationsbeschaffung, wodurch die Suchzeit um 25% reduziert wurde[cite: 3].</li>
                     </ul>
                 </div>
 
-                <!-- Entry 3 -->
-                <div class="log-entry">
-                    <div class="entry-title-row">
-                        <h4 class="entry-title">Senior Software Engineer | Product Owner | Test Manager</h4>
-                        <span class="entry-meta">Jul. 2018 - Oct. 2022[cite: 1]</span>
+                <!-- Job 3 -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Senior Software Engineer | PO | Test Manager[cite: 1]</span>
+                        <span class="card-meta">07/2018 - 10/2022[cite: 1]</span>
                     </div>
-                    <div class="entry-meta" style="margin-bottom: 8px;">Robert Bosch Engineering and Solutions - Bengaluru, India[cite: 1]</div>
+                    <div class="card-subtitle">Robert Bosch Engineering and Solutions - Bengaluru, India[cite: 1]</div>
                     <ul class="lang-en">
-                        <li>Led 4 projects end-to-end development of bootloader software for automatic transmissions for various OEMs, covering full lifecycle[cite: 1].</li>
-                        <li>Implemented cybersecurity features for secure flashing (signature), start-up (secure boot, trusted boot) and certificate handling (PKI) and parsing[cite: 1].</li>
-                        <li>Integrated Autosar, crypto and third-party stacks[cite: 1].</li>
-                        <li>Managed a product testing team of 5 people as test manager[cite: 1].</li>
-                        <li>Optimized resource utilization by reusing existing test cases for new projects, reducing test setup time by 25%[cite: 1].</li>
-                        <li>Designed SW architecture and implementation cross-platform components for IFX and ST micro-controllers, reducing startup effort for new projects by 35%[cite: 1].</li>
+                        <li>Led 4 projects end-to-end development of bootloader software for automatic transmissions for various OEMs[cite: 1].</li>
+                        <li>Implemented cybersecurity features for secure flashing, secure boot, trusted boot, and PKI handling[cite: 1].</li>
+                        <li>Integrated Autosar, crypto frameworks and managed a validation team of 5 engineers as test manager[cite: 1].</li>
                     </ul>
                     <ul class="lang-de">
-                        <li>Leitung von vier Projekten zur End-to-End-Entwicklung von Bootloader-Software für Automatikgetriebe für verschiedene OEMs, einschließlich des gesamten Softwareentwicklungslebenszyklus[cite: 3].</li>
+                        <li>Leitung von vier Projekten zur End-to-End-Entwicklung von Bootloader-Software für Automatikgetriebe für verschiedene OEMs[cite: 3].</li>
                         <li>Implementierung von Cybersecurity-Funktionen für sicheres Flashen (Signatur), sicheren Start (Secure Boot, Trusted Boot) sowie Zertifikatsverarbeitung (PKI) und Parsing[cite: 3].</li>
-                        <li>Integration von AUTOSAR-, Krypto- und Third-Party-Stacks[cite: 3].</li>
-                        <li>Anforderungsmanagement auf Kundenseite sowie Architektur und Komponentendesign[cite: 3].</li>
+                        <li>Integration von AUTOSAR-, Krypto- und Third-Party-Stacks sowie Leitung eines Produkt-Testteams von 5 Mitarbeitern[cite: 3].</li>
                     </ul>
                 </div>
             </div>
 
             <!-- PROJECTS PANE -->
-            <div id="pane-projects" class="system-pane">
-                <!-- Project 1 -->
-                <div class="log-entry">
-                    <div class="entry-title-row">
-                        <h4 class="entry-title">Modeling of LLMs for CyberSecurity in IoT devices | Thesis</h4>
-                        <span class="entry-meta">Dec. 2024 - Jun. 2025[cite: 1]</span>
+            <div id="pane-projects" class="section-pane">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Modeling of LLMs for CyberSecurity in IoT devices | Thesis[cite: 1]</span>
+                        <span class="card-meta">12/2024 - 06/2025[cite: 1]</span>
                     </div>
-                    <div class="entry-meta" style="margin-bottom: 8px;">Frankfurt University of Applied Sciences[cite: 1]</div>
-                    <p class="lang-en">Researching, collecting, and processing realistic IoT device network data. Optimizing, training, and fine-tuning open-source LLMs to generate synthetic network signatures for Intrusion Detection Systems to mitigate false positives[cite: 1].</p>
-                    <p class="lang-de">Recherche, Datenerfassung und Verarbeitung realistischer IoT-Gerätenetzwerkdaten. Optimierung, Training und Feinabstimmung verschiedener Open-Source-LLMs zur Generierung synthetischer Netzwerkdaten für Intrusion-Detection-Systeme zur Reduzierung von Fehlalarmen[cite: 3].</p>
+                    <div class="card-subtitle">Frankfurt University of Applied Sciences[cite: 1]</div>
+                    <p class="lang-en">Optimizing, training, and fine-tuning open-source LLMs on realistic network telemetry to simulate attacks and benchmark advanced defensive intrusion layers[cite: 1].</p>
+                    <p class="lang-de">Recherche, Datenerfassung und Verarbeitung realistischer IoT-Gerätenetzwerkdaten. Optimierung, Training und Feinabstimmung verschiedener Open-Source-LLMs zur Reduzierung von Fehlalarmen in IDS[cite: 3].</p>
                 </div>
 
-                <!-- Project 2 -->
-                <div class="log-entry">
-                    <div class="entry-title-row">
-                        <h4 class="entry-title">Object Detection and Tracking in Computer Vision using Deep Learning</h4>
-                        <span class="entry-meta">Dec. 2023 - May 2024[cite: 1]</span>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Object Detection and Tracking in Computer Vision[cite: 1]</span>
+                        <span class="card-meta">12/2023 - 05/2024[cite: 1]</span>
                     </div>
-                    <p class="lang-en">Combined RGB and depth cameras for human detection and tracking in a live video using YOLO and SORT algorithms, improving detection accuracy by 70% in low-light conditions[cite: 1].</p>
-                    <p class="lang-de">Kombination von RGB- und Tiefenkameras zur Personenerkennung und -verfolgung in Live-Videostreams unter Verwendung der YOLO- und SORT-Algorithmen, wodurch die Erkennungsgenauigkeit bei schlechten Lichtverhältnissen um 70% verbessert wurde[cite: 3].</p>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="log-entry">
-                    <div class="entry-title-row">
-                        <h4 class="entry-title">Smart Baby Seat Detection in Vehicles Using Sensors & ML</h4>
-                        <span class="entry-meta">Dec. 2023 - Mar. 2024[cite: 1]</span>
-                    </div>
-                    <p class="lang-en">Collected, trained and tested data on neural network models, achieving 91% accuracy in detecting babies in baby seat of a car using ultrasonic sensors[cite: 1].</p>
-                    <p class="lang-de">Datenerhebung, Training und Testen von neuronalen Netzwerkmodellen zur Erkennung von Säuglingen in einer Babyschale im Fahrzeug unter Verwendung eines Ultraschallsensors, wobei eine Genauigkeit von 91% erreicht wurde[cite: 3].</p>
-                </div>
-
-                <!-- Project 4 -->
-                <div class="log-entry">
-                    <div class="entry-title-row">
-                        <h4 class="entry-title">Setup 5G network using Open5GS and UERANSIM</h4>
-                        <span class="entry-meta">Dec. 2023 - Feb. 2024[cite: 2]</span>
-                    </div>
-                    <p class="lang-en">Configured a 5G standalone network supporting internet connectivity, VoIP, file sharing, messaging, and video streaming with network slicing configurations[cite: 2].</p>
-                    <p class="lang-de">Konfiguration eines eigenständigen 5G-Netzwerks (Standalone), das Internetkonnektivität, VoIP, Dateifreigabe, Messaging und Videostreaming mit Network Slicing unterstützt[cite: 2].</p>
-                </div>
-
-                <!-- Project 5 -->
-                <div class="log-entry">
-                    <div class="entry-title-row">
-                        <h4 class="entry-title">Unit tests for component in NeoCortexApi</h4>
-                        <span class="entry-meta">Nov. 2023 - Jul. 2024[cite: 1]</span>
-                    </div>
-                    <p class="lang-en">Developed and executed unit tests for the Adapt segments module in the open-source project 'NeoCortexApi', achieving 100% code coverage and deploying it on Azure web services[cite: 1].</p>
-                    <p class="lang-de">Entwicklung und Durchführung von Unit-Tests für das Adapt-Segments-Modul im Open-Source-Projekt "NeoCortexApi", Erreichung von 100% Codeabdeckung sowie Deployment auf Azure-Webservices[cite: 3].</p>
+                    <p class="lang-en">Combined RGB and depth cameras for tracking via YOLO/SORT frameworks, raising visibility reliability by 70% in low-light environments[cite: 1].</p>
+                    <p class="lang-de">Kombination von RGB- und Tiefenkameras zur Personenerkennung und -verfolgung in Live-Videostreams unter Verwendung von YOLO- und SORT-Algorithmen (+70% Genauigkeit bei schlechtem Licht)[cite: 3].</p>
                 </div>
             </div>
 
             <!-- SKILLS PANE -->
-            <div id="pane-skills" class="system-pane">
-                <div class="grid-2">
-                    <div class="skill-group">
-                        <h4>Programming & Tools[cite: 1]</h4>
-                        <div class="badge-wall">
-                            <span class="badge">C/C++</span><span class="badge">Python</span><span class="badge">C#</span>
-                            <span class="badge">Java</span><span class="badge">OpenSSL</span><span class="badge">GIT</span>
-                            <span class="badge">CMake</span><span class="badge">Microsoft Azure</span><span class="badge">CI/CD</span>
-                            <span class="badge">Vector CANoe</span><span class="badge">MISRA</span><span class="badge">Trace32</span>
-                            <span class="badge">IBM Doors</span><span class="badge">Rhapsody</span><span class="badge">Docker</span>
-                        </div>
-                    </div>
-                    <div class="skill-group">
-                        <h4>Artificial Intelligence[cite: 1]</h4>
-                        <div class="badge-wall">
-                            <span class="badge">LLM Tuning</span><span class="badge">Machine Learning</span>
-                            <span class="badge">Computer Vision</span><span class="badge">OpenCV</span>
-                            <span class="badge">Generative AI</span><span class="badge">PyTorch</span>
-                            <span class="badge">TensorFlow</span><span class="badge">Scikit-learn</span>
-                        </div>
-                    </div>
-                    <div class="skill-group">
-                        <h4>ISO Standards & Methodologies[cite: 1]</h4>
-                        <div class="badge-wall">
-                            <span class="badge">ISO 14229</span><span class="badge">ISO 21434</span>
-                            <span class="badge">ISO 26262</span><span class="badge">V-Model</span>
-                            <span class="badge">Agile Scrum</span>
-                        </div>
-                    </div>
-                    <div class="skill-group">
-                        <h4>Languages[cite: 1]</h4>
-                        <div class="badge-wall">
-                            <span class="badge">English (C1)</span>
-                            <span class="badge">German (B2)</span>
-                            <span class="badge">Kannada (Native)</span>
-                        </div>
-                    </div>
-                </div>
+            <div id="pane-skills" class="section-pane">
+                <h2 class="lang-en">Technical Ecosystem</h2>
+                <h2 class="lang-de">Technisches Ökosystem</h2>
+                
+                <div><strong>Embedded / Tooling:[cite: 1]</strong> C/C++, Python, C#, Java, OpenSSL, CMake, Vector CANoe, MISRA, Trace32, IBM Doors, Docker.</div>
+                <div style="margin-top: 10px;"><strong>AI Architecture:[cite: 1]</strong> LLM fine-tuning, OpenCV, PyTorch, PyData Stack, TensorFlow, Scikit-learn.</div>
+                <div style="margin-top: 10px;"><strong>Standards:[cite: 1]</strong> ISO 14229 (UDS), ISO 21434 (Cybersecurity), ISO 26262 (Functional Safety).</div>
             </div>
 
             <!-- EDUCATION PANE -->
-            <div id="pane-education" class="system-pane">
-                <div class="log-entry">
-                    <div class="entry-title-row">
-                        <h4 class="entry-title">Master of Engineering (M.Engg.) - Information Technology</h4>
-                        <span class="entry-meta">Oct. 2022 - Sept. 2025[cite: 1]</span>
+            <div id="pane-education" class="section-pane">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Master of Engineering (M.Engg.) - Information Technology[cite: 1]</span>
+                        <span class="card-meta">10/2022 - 09/2025[cite: 1]</span>
                     </div>
-                    <div class="entry-meta">Frankfurt University of Applied Sciences, Frankfurt am Main (Grade: 1.8)[cite: 1]</div>
+                    <div class="card-subtitle">Frankfurt University of Applied Sciences (Grade: 1.8)[cite: 1]</div>
                 </div>
-
-                <div class="log-entry">
-                    <div class="entry-title-row">
-                        <h4 class="entry-title">Bachelor of Engineering (B.E.) - Electronics & Communications</h4>
-                        <span class="entry-meta">Aug. 2014 - Jun. 2018[cite: 1]</span>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Bachelor of Engineering (B.E.) - Electronics & Communications[cite: 1]</span>
+                        <span class="card-meta">08/2014 - 06/2018[cite: 1]</span>
                     </div>
-                    <div class="entry-meta">JSS Academy of Technical Education, Bengaluru, India[cite: 1]</div>
-                    <div style="margin-top: 10px;" class="entry-meta">
-                        <strong>Thesis:</strong> "Detection and Classification of Tumour in Brain MRI" (Accuracy: 91.4%, BER 0.12 using SVM & ANN structures)[cite: 1, 2].
-                    </div>
+                    <div class="card-subtitle">JSS Academy of Technical Education, India[cite: 1]</div>
                 </div>
             </div>
 
             <!-- AWARDS & CERTS PANE -->
-            <div id="pane-awards" class="system-pane">
-                <h3 class="lang-en">// HONORS AND AWARDS</h3>
-                <h3 class="lang-de">// AUSZEICHNUNGEN</h3>
+            <div id="pane-awards" class="section-pane">
+                <h2 class="lang-en">Honors & Vendor Credentials</h2>
+                <h2 class="lang-de">Auszeichnungen & Zertifikate</h2>
                 <ul>
-                    <li><strong>Torch bearer of the Department</strong> - Robert Bosch Engineering (Dec 2020)</li>
-                    <li><strong>Spot award</strong> - Robert Bosch Engineering and Business Solutions (Oct 2020)</li>
-                    <li><strong>Excellence in academic performance</strong> - JSS Academy of Technical Education (Feb 2015)</li>
+                    <li>Torch bearer of the Department - Robert Bosch Engineering (Dec 2020)</li>
+                    <li>Automotive Cybersecurity Engineering ISO/SAE 21434 (Udemy, 2025)</li>
+                    <li>Mastering Real-Time Operating Systems (RTOS) - FreeRTOS / STM32 (Udemy)</li>
+                    <li>AUTOSAR DCM & Diagstack Architecture Frameworks (2020)</li>
                 </ul>
-
-                <h3 class="lang-en" style="margin-top: 30px;">// CYBERSECURITY & SYSTEM CERTIFICATIONS</h3>
-                <h3 class="lang-de" style="margin-top: 30px;">// ZERTIFIZIERUNGEN</h3>
-                <div class="grid-2">
-                    <div>
-                        <ul>
-                            <li>Electric Vehicle Battery Components (Udemy, 2025)</li>
-                            <li>Cybersecurity - Automotive [TARA, IDS] (Udemy, 2025)</li>
-                            <li>Cybersecurity Engineering ISO/SAE 21434 (Udemy, 2025)</li>
-                            <li>Python for Computer Vision with OpenCV (Udemy, 2024)</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul>
-                            <li>Embedded ARM Cortex-M33 Trust Zone (Udemy, 2021)</li>
-                            <li>STM32Fx Microcontroller Custom Bootloader (Udemy, 2021)</li>
-                            <li>Mastering RTOS: Hands on FreeRTOS & STM32 (Udemy, 2021)</li>
-                            <li>Learn Autosar DCM and Diagstack from scratch (2020)</li>
-                        </ul>
-                    </div>
-                </div>
             </div>
         </main>
     </div>
 
-    <!-- TERMINAL SCRIPT CONTROLLER -->
+    <!-- TERMINAL CONTROLLER ROUTINE -->
     <script>
-        function loadPane(paneId, commandText) {
-            // Update Terminal Prompt Graphic Text
-            document.getElementById('terminal-command').innerText = commandText;
+        function navigate(paneId, commandString) {
+            document.getElementById('cmd-text').innerText = commandString;
             
-            // Switch Active Status on Tabs
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
 
-            // Switch Active Panes
-            document.querySelectorAll('.system-pane').forEach(pane => {
-                pane.classList.remove('active-pane');
-            });
-            document.getElementById('pane-' + paneId).classList.add('active-pane');
+            document.querySelectorAll('.section-pane').forEach(pane => pane.classList.remove('active'));
+            document.getElementById('pane-' + paneId).classList.add('active');
         }
 
-        function switchLanguage() {
+        function toggleLanguage() {
             const currentLang = document.body.getAttribute('lang');
-            if(currentLang === 'en') {
-                document.body.setAttribute('lang', 'de');
-            } else {
-                document.body.setAttribute('lang', 'en');
-            }
+            const targetLang = (currentLang === 'en') ? 'de' : 'en';
+            document.body.setAttribute('lang', targetLang);
         }
     </script>
 </body>
